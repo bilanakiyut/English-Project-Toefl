@@ -4,17 +4,71 @@ namespace App\Controllers;
 
 class MateriController extends BaseController
 {
-    // 1. Tampilkan Halaman Utama (Yang isinya 3 Menu Gede: Structure, Reading, Listening)
+    // Membuka halaman utama pilihan materi (app/Views/materi/materi.php)
     public function index()
     {
-        // Ganti 'materi' dengan nama file view 3 menu kamu yang lama jika berbeda
-        return view('materi'); 
+        return view('materi/materi');
     }
 
-    // 2. Tampilkan Halaman Rincian Modul Buku Structure (Ada 8 Buku)
+    // Membuka halaman structure (app/Views/materi/structure_materi.php)
     public function structure()
     {
-        // Sesuai konfirmasi kamu, ini memanggil file structure_materi.php
-        return view('structure_materi'); 
+        return view('materi/structure/structure_materi');
+    }
+    public function noun_clause()
+    {
+        return view('materi/structure/noun_clause');
+    }
+    public function writing()
+    {
+        return view('materi/writing/writing_materi');
+    }
+     public function parallel_structure()
+    {
+        return view('materi/writing/parallel_structure');
+    }
+    public function parallel_coordinate_conjuction()
+    {
+        return view('materi/writing/parallel_coordinate_conjuction');
+    }
+    public function parallel_paired_conjuction()
+    {
+        return view('materi/writing/parallel_paired_conjuction');
+    }
+    public function present_participle()
+    {
+        return view('materi/writing/present_participle');
+    }
+    public function past_participle()
+    {
+        return view('materi/writing/past_participle');
+    }
+    public function present_participle_after_be()
+    {
+        return view('materi/writing/present_participle_after_be');
+    }
+     public function base_form()
+    {
+        return view('materi/writing/base_form');
+    }
+    public function reading()
+    {
+        return view('materi/reading/reading_materi');
+    }
+     public function skimming_scanning()
+    {
+        return view('materi/reading/skimming_scanning');
+    }
+    public function vocabulary()
+    {
+        return view('materi/reading/vocabulary');
+    }
+    public function main_idea()
+    {
+        return view('materi/reading/main_idea');
+    }
+     public function listening()
+    {
+        return view('materi/listening/listening_materi');
     }
 }

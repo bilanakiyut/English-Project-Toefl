@@ -31,12 +31,24 @@
             );
         }
 
+        /* PACK ELEMEN NAVIGASI */
         nav {
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
             padding: 36px 70px 0;
+            width: 100%;
+        }
+
+        .nav-links {
+            display: flex;
             gap: 38px;
+        }
+
+        .auth-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         nav a {
@@ -51,7 +63,8 @@
             position: relative;
         }
 
-        nav a::after {
+        /* Efek Garam Bawah Hover hanya untuk Menu Utama */
+        .nav-links a::after {
             content: '';
             position: absolute;
             bottom: -4px; left: 0;
@@ -60,9 +73,44 @@
             transition: width 0.3s ease;
         }
 
-        nav a:hover { color: var(--cream); letter-spacing: 3px; }
-        nav a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--cream); letter-spacing: 3px; }
+        .nav-links a:hover::after { width: 100%; }
 
+        /* Tombol Login */
+        nav a.btn-login {
+            border: 1px solid rgba(242, 229, 198, 0.4);
+            padding: 8px 22px;
+            border-radius: 18px;
+            transition: all 0.3s ease;
+        }
+
+        nav a.btn-login:hover {
+            border-color: var(--cream);
+            background: rgba(242, 229, 198, 0.1);
+            color: var(--cream);
+            letter-spacing: 2px;
+        }
+
+        /* Tombol Register */
+        nav a.btn-register {
+            background: var(--cream);
+            color: var(--maroon-dark);
+            padding: 8px 22px;
+            border-radius: 18px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(67, 12, 23, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        nav a.btn-register:hover {
+            background: #ffffff;
+            color: var(--maroon);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(67, 12, 23, 0.25);
+            letter-spacing: 2px;
+        }
+
+        /* LAYOUT UTAMA */
         .container {
             display: flex;
             align-items: center;
@@ -152,7 +200,7 @@
 
         .stat-divider { width: 1px; height: 40px; background: #d4bc85; }
 
-        /* IMAGE GRID */
+        /* IMAGE GRID & SHAPES */
         .image-grid {
             flex: 1;
             display: flex;
@@ -236,7 +284,6 @@
             stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
         }
 
-        /* Col kiri: s1 tall atas, s3 pendek bawah */
         .s1 {
             background-color: var(--maroon-dark);
             border-radius: 110px 0 110px 0;
@@ -253,7 +300,6 @@
             animation: float2 5s ease-in-out infinite 0.8s;
         }
 
-        /* Col kanan: s2 pendek atas, s4 tall bawah */
         .s2 {
             background-color: var(--maroon-muted);
             border-radius: 0 110px 0 110px;
@@ -270,6 +316,7 @@
             animation: float1 5s ease-in-out infinite 2.2s;
         }
 
+        /* KEYFRAMES ANIMASI */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -290,8 +337,21 @@
             50%       { transform: translateY(-10px); }
         }
 
+        /* RESPONSIVE DESIGN */
         @media (max-width: 900px) {
-            nav { padding: 22px 20px 0; justify-content: center; gap: 15px; flex-wrap: wrap; }
+            nav { 
+                flex-direction: column; 
+                gap: 20px; 
+                padding: 22px 20px 0;
+            }
+            .nav-links {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            .auth-links {
+                margin-top: 5px;
+            }
             .container { flex-direction: column; padding: 36px 20px 60px; gap: 40px; }
             .content h1 { font-size: 2.5rem; text-align: center; }
             .content p { text-align: center; }
@@ -303,12 +363,18 @@
 <body>
 
     <nav>
-        <a href="<?= base_url('/') ?>">Home</a>
-        <a href="<?= base_url('/materi') ?>">Material</a>
-        <a href="#">Soal</a>
-        <a href="#">TOEFL</a>
-        <a href="#">History</a>
-        <a href="#">About Us</a>
+        <div class="nav-links">
+    <a href="<?= base_url('/') ?>">Home</a>
+    <a href="<?= base_url('materi') ?>">Material</a> <a href="#">Soal</a>
+    <a href="#">TOEFL</a>
+    <a href="#">History</a>
+    <a href="#">About Us</a>
+</div>
+
+        <div class="auth-links">
+            <a href="<?= base_url('login') ?>" class="btn-login">Login</a>
+            <a href="<?= base_url('register') ?>" class="btn-register">Register</a>
+        </div>
     </nav>
 
     <div class="container">

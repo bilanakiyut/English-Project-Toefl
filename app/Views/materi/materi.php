@@ -139,16 +139,21 @@
 
     <div class="materi-section">
 
-        <a href="<?= base_url('materi/structure') ?>" class="materi-link align-right" style="cursor: pointer; display: flex;">
-    <img src="<?php echo base_url('assets/images/materi-structure.svg'); ?>" alt="Materi Structure" style="pointer-events: none;">
-</a>
-
-        <a href="#" class="materi-link align-left">
-            <img src="<?php echo base_url('assets/images/materi-reading.svg'); ?>" alt="Materi Reading">
+        <a href="<?= base_url('materi/structure/structure') ?>" class="materi-link align-right" style="cursor: pointer; display: flex;">
+            <img src="<?php echo base_url('assets/images/materi-structure.svg'); ?>" alt="Materi Structure" style="pointer-events: none;">
         </a>
 
-        <a href="#" class="materi-link align-right">
-            <img src="<?php echo base_url('assets/images/materi-listening.svg'); ?>" alt="Materi Listening">
+    
+        <a href="<?= base_url('materi/writing/writing') ?>" class="materi-link align-left" style="cursor: pointer; display: flex;">
+            <img src="<?php echo base_url('assets/images/materi-writing.svg'); ?>" alt="Materi Writing" style="pointer-events: none;">
+        </a>
+
+        <a href="<?= base_url('materi/reading/reading') ?>" class="materi-link align-right" style="cursor: pointer; display: flex;">
+            <img src="<?php echo base_url('assets/images/materi-reading.svg'); ?>" alt="Materi Reading" style="pointer-events: none;">
+        </a>
+
+        <a href="<?= base_url('materi/listening/listening') ?>" class="materi-link align-left" style="cursor: pointer; display: flex;">
+            <img src="<?php echo base_url('assets/images/materi-listening.svg'); ?>" alt="Materi Listening" style="pointer-events: none;">
         </a>
 
     </div>
