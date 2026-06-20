@@ -206,9 +206,8 @@
     <nav>
         <a href="<?= base_url('/') ?>">Home</a>
         <a href="<?= base_url('materi') ?>">Material</a>
-        <a href="#">Soal</a>
-        <a href="#">TOEFL</a>
-        <a href="#">History</a>
+        <a href="<?= base_url('quiz_toefl') ?>">TOEFL</a>
+       <a href="<?= base_url('dashboard_history') ?>">History</a>
         <a href="#">About Us</a>
     </nav>
 
@@ -222,7 +221,7 @@
         
         <div class="books-grid">
             
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/structure/singular-plural-nouns') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-singular-plural.png'); ?>" alt="Singular & Plural">
                 </div>
@@ -230,7 +229,7 @@
                 <p>Mastering noun identification and agreement rules.</p>
             </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/structure/countable-uncountable-noun') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-countable-uncountable.png'); ?>" alt="Countable & Uncountable">
                 </div>
@@ -238,7 +237,7 @@
                 <p>Learning how to identify and use nouns based on quantity and measurement.</p>
             </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/structure/subject-object-pronouns') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-subject-object.png'); ?>" alt="Subject & Object Pronouns">
                 </div>
@@ -246,7 +245,7 @@
                 <p>Using pronouns correctly as subjects and objects in sentences.</p>
             </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/structure/possessive-pronoun') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-possesive-pronoun.png'); ?>" alt="Possessives Pronoun">
                 </div>
@@ -262,7 +261,7 @@
 
         <div class="books-grid">
             
-            <a href="#" class="book-card">
+        <a href="<?= base_url('materi/structure/cordinate-connector') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-coordinate-connector.png'); ?>" alt="Coordinate Connectors">
                 </div>
@@ -270,7 +269,7 @@
                 <p>Understanding connectors used to join equal ideas in sentences.</p>
             </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/structure/adverb-clause-connector') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-adverb-clause.png'); ?>" alt="Adverb Clause Connectors">
                 </div>
@@ -278,15 +277,15 @@
                 <p>Learning connectors that explain time, reason, condition, and contrast.</p>
             </a>
 
-           <a href="<?= base_url('materi/structure/noun_clause') ?>" class="book-card">
-            <div class="book-img-wrapper">
-                <img src="<?php echo base_url('assets/images/book-noun-clause.png'); ?>" alt="Noun Clause Connectors">
-            </div>
-            <h3>Noun Clause Connectors</h3>
-            <p>Understanding connectors used to introduce noun clauses.</p>
-        </a>
+                <a href="<?= base_url('materi/structure/noun-clause-connector') ?>" class="book-card">
+                <div class="book-img-wrapper">
+                    <img src="<?php echo base_url('assets/images/book-noun-clause.png'); ?>" alt="Noun Clause Connectors">
+                </div>
+                <h3>Noun Clause Connectors</h3>
+                <p>Understanding connectors used to introduce noun clauses.</p>
+            </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/structure/adjective-clause-connector') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-adjective-clause.png'); ?>" alt="Adjective Clause Connectors">
                 </div>

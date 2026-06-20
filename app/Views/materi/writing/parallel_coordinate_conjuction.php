@@ -342,9 +342,8 @@
     <nav>
         <a href="<?= base_url('/') ?>">Home</a>
         <a href="<?= base_url('materi') ?>">Material</a>
-        <a href="#">Soal</a>
-        <a href="#">TOEFL</a>
-        <a href="#">History</a>
+        <a href="<?= base_url('quiz_toefl') ?>">TOEFL</a>
+        <a href="<?= base_url('dashboard_history') ?>">History</a>
         <a href="#">About Us</a>
     </nav>
 
@@ -562,7 +561,7 @@
                 <h3>Video Lesson</h3>
                 <p>Watch expert breakdown</p>
                 <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/9K4Rjdp_DqQ?si=x4k2vQ86WFnfA27f" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             </div>
 

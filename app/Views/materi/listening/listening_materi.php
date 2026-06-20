@@ -210,9 +210,8 @@
     <nav>
         <a href="<?= base_url('/') ?>">Home</a>
         <a href="<?= base_url('materi') ?>">Material</a>
-        <a href="#">Soal</a>
-        <a href="#">TOEFL</a>
-        <a href="#">History</a>
+        <a href="<?= base_url('quiz_toefl') ?>">TOEFL</a>
+        <a href="<?= base_url('dashboard_history') ?>">History</a>
         <a href="#">About Us</a>
     </nav>
 
@@ -226,25 +225,25 @@
         
         <div class="books-grid">
             
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/listening/listening-short-conversations') ?>" class="book-card">
                 <div class="book-img-wrapper">
-                    <img src="<?php echo base_url('assets/images/book-listening1.png'); ?>" alt="Listening to short conversation">
+                    <img src="<?php echo base_url('assets/images/book-listening-1.png'); ?>" alt="Listening to short conversation">
                 </div>
                 <h3>Listening to short conversation</h3>
                 <p>Practicing understanding through brief everyday conversations.</p>
             </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/listening/listening-longer-conversations') ?>" class="book-card">
                 <div class="book-img-wrapper">
-                    <img src="<?php echo base_url('assets/images/book-listening2.png'); ?>" alt="Listening to longer conversation">
+                    <img src="<?php echo base_url('assets/images/book-listening-2.png'); ?>" alt="Listening to longer conversation">
                 </div>
                 <h3>Listening to longer conversation</h3>
                 <p>Improving comprehension of longer and more detailed discussions.</p>
             </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/listening/listening-talks-notetaking') ?>" class="book-card">
                 <div class="book-img-wrapper">
-                    <img src="<?php echo base_url('assets/images/book-listening3.png'); ?>" alt="Listening to talks and note taking">
+                    <img src="<?php echo base_url('assets/images/book-listening-3.png'); ?>" alt="Listening to talks and note taking">
                 </div>
                 <h3>Listening to talks and note taking</h3>
                 <p>Developing listening and note-taking skills from spoken talks or lectures.</p>

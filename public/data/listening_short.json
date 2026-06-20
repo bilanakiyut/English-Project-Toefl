@@ -1,0 +1,53 @@
+[
+{
+"id": 1,
+"audio": "/assets/audio/no1.mp3",
+"a": "He likes cherries better than grapes.",
+"b": "He bought grapes because they were cheap.",
+"c": "He would have preferred to buy grapes.",
+"d": "He thinks cherries are less expensive.",
+"correct_answer": "C",
+"explanation": "The man implies that he would rather have bought grapes because they were cheaper."
+},
+{
+"id": 2,
+"audio": "/assets/audio/no2.mp3",
+"a": "She was not angry at Richard.",
+"b": "Richard made her extremely angry.",
+"c": "She did not understand what Richard said.",
+"d": "Richard apologized to her.",
+"correct_answer": "B",
+"explanation": "The word 'infuriated' means extremely angry."
+},
+{
+"id": 3,
+"audio": "/assets/audio/no3.mp3",
+"a": "He is very sad about retiring.",
+"b": "He does not want to retire.",
+"c": "He is happy to retire.",
+"d": "He has not decided to retire.",
+"correct_answer": "C",
+"explanation": "Although the sentence uses a double negative, it implies that the boss is actually pleased or satisfied about retiring."
+},
+{
+"id": 4,
+"audio": "/assets/audio/no4.mp3",
+"a": "Tom paid her rent.",
+"b": "Tom borrowed money from her.",
+"c": "Tom gave her enough money to buy a house.",
+"d": "Tom helped her financially.",
+"correct_answer": "D",
+"explanation": "The woman says Tom lent her money so she could pay her rent. This means Tom helped her financially."
+},
+{
+"id": 5,
+"audio": "/assets/audio/no5.mp3",
+"a": "She has left the apartment.",
+"b": "She is probably still in the apartment.",
+"c": "She forgot to take her purse.",
+"d": "She is looking for her purse.",
+"correct_answer": "B",
+"explanation": "The man assumes Debbie is still in the apartment because her purse is still there."
+}
+
+]

@@ -1,0 +1,43 @@
+[
+    {
+        "id": 1,
+        "audio": "/assets/audio/no15.mp3",
+        "a": "At the end of the semester",
+        "b": "Before a sociology lecture begins",
+        "c": "During a library meeting",
+        "d": "After students submit their papers",
+        "correct_answer": "B",
+        "explanation": "The speaker says, “Before I start today's sociology lecture,” which shows that the talk happens before the lecture begins." 
+    },
+     {
+        "id": 2,
+        "audio": "/assets/audio/no16.mp3",
+        "a": "By Friday",
+        "b": "Tomorrow",
+        "c": "In two weeks",
+        "d": "At the end of the month",
+        "correct_answer": "C",
+        "explanation": "The speaker clearly states, “The paper itself is due in two weeks.”" 
+    },
+    {
+        "id": 3,
+        "audio": "/assets/audio/no17.mp3",
+        "a": "Newspapers and magazines",
+        "b": "Interviews and websites",
+        "c": "Books and journal articles",
+        "d": "Encyclopedias and dictionaries",
+        "correct_answer": "C",
+        "explanation": "The speaker says students should use “at least three books and at least three recent journal articles.”" 
+    },
+    {
+        "id": 4,
+        "audio": "/assets/audio/no18.mp3",
+        "a": "5 pages",
+        "b": "6 pages",
+        "c": "7 pages",
+        "d": "8 pages",
+        "correct_answer": "C",
+        "explanation": "The paper should include: 5 pages of composition, 1 title page, and 1 reference page. Total = 7 pages." 
+    }
+
+]

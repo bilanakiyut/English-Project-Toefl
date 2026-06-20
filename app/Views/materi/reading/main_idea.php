@@ -521,18 +521,29 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .video-card {
+            background-color: var(--maroon-dark);
+            border-radius: 20px;
+            padding: 25px;
+            color: var(--text-light);
+            box-shadow: 0 10px 25px rgba(67, 12, 23, 0.1);
         }
+
+        .video-card h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 4px; }
+        .video-card p { font-size: 0.95rem; opacity: 0.7; margin-bottom: 15px; }
+
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; border-radius: 12px; overflow: hidden; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 992px) {
             .materi-wrapper { grid-template-columns: 1fr; }
             .materi-right-sticky { position: relative; top: 0; }
             nav { padding: 20px; justify-content: center; }
-            .connectors-group-flex { grid-template-columns: 1fr; }
             .analysis-grid { grid-template-columns: 1fr; }
-        }
+            .options-grid { grid-template-columns: 1fr; }
+}
     </style>
 </head>
 <body>
@@ -540,9 +551,8 @@
     <nav>
         <a href="<?= base_url('/') ?>">Home</a>
         <a href="<?= base_url('materi') ?>">Material</a>
-        <a href="#">Exercise</a>
-        <a href="#">TOEFL</a>
-        <a href="#">History</a>
+       <a href="<?= base_url('quiz_toefl') ?>">TOEFL</a>
+        <a href="<?= base_url('dashboard_history') ?>">History</a>
         <a href="#">About Us</a>
     </nav>
 
@@ -736,6 +746,10 @@
                         <h4>Avoid This Mistake</h4>
                         <p>Do not choose an answer that only describes one sentence or one minor detail.</p>
                     </div>
+
+
+
+                 
                 </div>
 
             </div>
@@ -864,6 +878,13 @@
                 <div class="formula-box">Identify the Author's Main Point</div>
             </div>
 
+               <div class="video-card">
+                <h3>Video Lesson</h3>
+                <p>Watch expert breakdown</p>
+                <div class="video-container">
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4swFGRhQoMI?si=PJv7s-n-_TptRICr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+            </div>
         </div>
 
     </div>

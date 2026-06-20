@@ -1,0 +1,42 @@
+[
+    {
+       "id": 1,
+        "audio": "/assets/audio/no11.mp3",
+        "a": "The history of space travel",
+        "b": "Garbage orbiting the Earth",
+        "c": "The dangers of nuclear reactors",
+        "d": "The cost of space programs",
+        "correct_answer": "B",
+        "explanation": "The conversation focuses on the large amount of garbage and metal debris orbiting the Earth in space." 
+    },
+     {
+       "id": 2,
+        "audio": "/assets/audio/no12.mp3",
+        "a": "From a newspaper article",
+        "b": "From a science magazine",
+        "c": "From a television program",
+        "d": "From a university lecture",
+        "correct_answer": "C",
+        "explanation": "The woman says, “I saw a television program about it last night,” which directly states where she learned about the problem." 
+    },
+     {
+       "id": 3,
+        "audio": "/assets/audio/no13.mp3",
+        "a": "About 300 tons",
+        "b": "About 3,000 tons",
+        "c": "About 17,000 tons",
+        "d": "About 57,000 tons",
+        "correct_answer": "B",
+        "explanation": "The woman explains that according to the television program, there are about 3,000 tons of metal in orbit around the Earth." 
+    },
+     {
+       "id": 4,
+        "audio": "/assets/audio/no14.mp3",
+        "a": "Scientists will stop all space missions",
+        "b": "The garbage will naturally disappear",
+        "c": "Scientists will find solutions to the problem",
+        "d": "Nuclear reactors will no longer be used in space",
+        "correct_answer": "C",
+        "explanation": "At the end of the conversation, the woman says she hopes scientists will be able to find solutions before the problem becomes worse." 
+    }
+]

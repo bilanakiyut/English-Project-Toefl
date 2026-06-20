@@ -131,9 +131,8 @@
     <nav>
         <a href="<?= base_url('/') ?>">Home</a>
         <a href="<?= base_url('/materi') ?>">Material</a>
-        <a href="#">Soal</a>
-        <a href="#">TOEFL</a>
-        <a href="#">History</a>
+        <a href="<?= base_url('quiz_toefl') ?>">TOEFL</a>
+       <a href="<?= base_url('dashboard_history') ?>">History</a>
         <a href="#">About Us</a>
     </nav>
 

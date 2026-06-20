@@ -211,9 +211,8 @@
     <nav>
         <a href="<?= base_url('/') ?>">Home</a>
         <a href="<?= base_url('materi') ?>">Material</a>
-        <a href="#">Soal</a>
-        <a href="#">TOEFL</a>
-        <a href="#">History</a>
+       <a href="<?= base_url('quiz_toefl') ?>">TOEFL</a>
+       <a href="<?= base_url('dashboard_history') ?>">History</a>
         <a href="#">About Us</a>
     </nav>
 
@@ -225,25 +224,25 @@
         <h2 class="section-title">Writing Expression 1</h2>
         <div class="books-grid">
             
-            <a href="<?= base_url('materi/writin/subject-verb-agreement') ?>" class="book-card">
+            <a href="<?= base_url('materi/writing/subject-verb-agreement') ?>" class="book-card">
                 <div class="book-img-wrapper"><img src="<?= base_url('assets/images/6.png'); ?>" alt="Subject - Verb Agreement"></div>
                 <h3>Subject - Verb Agreement</h3>
                 <p>Mastering the correct agreement between subjects and verbs.</p>
             </a>
 
-            <a href="<?= base_url('materi/writing/agreement-prepositional') ?>" class="book-card">
+             <a href="<?= base_url('materi/writing/agreement-after-prepositional-phrase') ?>" class="book-card">
                 <div class="book-img-wrapper"><img src="<?= base_url('assets/images/7.png'); ?>" alt="Agreement after Prepositional Phrases"></div>
                 <h3>Agreement after Prepositional Phrases</h3>
                 <p>Understanding subject-verb agreement after prepositional phrases.</p>
             </a>
 
-            <a href="<?= base_url('materi/writing/agreement-quantity') ?>" class="book-card">
+            <a href="<?= base_url('materi/writing/agreement-after-certain-words') ?>" class="book-card">
                 <div class="book-img-wrapper"><img src="<?= base_url('assets/images/8.png'); ?>" alt="Agreement after Expressions of Quantity"></div>
                 <h3>Agreement after Expressions of Quantity</h3>
                 <p>Learning agreement rules used with quantity expressions.</p>
             </a>
 
-            <a href="<?= base_url('materi/writing/agreement-certain-words') ?>" class="book-card">
+            <a href="<?= base_url('materi/writing/agreement-after-certain-words') ?>" class="book-card">
                 <div class="book-img-wrapper"><img src="<?= base_url('assets/images/9.png'); ?>" alt="Agreement after Certain Words"></div>
                 <h3>Agreement after Certain Words</h3>
                 <p>Mastering singular subject agreements after specific indefinite pronouns.</p>

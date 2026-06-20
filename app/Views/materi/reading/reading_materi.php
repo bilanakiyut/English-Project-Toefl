@@ -210,9 +210,8 @@
     <nav>
         <a href="<?= base_url('/') ?>">Home</a>
         <a href="<?= base_url('materi') ?>">Material</a>
-        <a href="#">Soal</a>
-        <a href="#">TOEFL</a>
-        <a href="#">History</a>
+        <a href="<?= base_url('quiz_toefl') ?>">TOEFL</a>
+        <a href="<?= base_url('dashboard_history') ?>">History</a>
         <a href="#">About Us</a>
     </nav>
 
@@ -257,7 +256,7 @@
                 <p>Identifying the primary point or core argument of various English texts.</p>
             </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/reading/stated-detail-information') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-reading4.png'); ?>" alt="Stated Detail Information">
                 </div>
@@ -265,11 +264,27 @@
                 <p>Finding and analyzing specific information directly mentioned in the text.</p>
             </a>
 
-            <a href="#" class="book-card">
+            <a href="<?= base_url('materi/reading/unstated-detail-information') ?>" class="book-card">
                 <div class="book-img-wrapper">
                     <img src="<?php echo base_url('assets/images/book-reading5.png'); ?>" alt="Unstated Detail Information">
                 </div>
                 <h3>Unstated Detail Information</h3>
+                <p>Recognizing facts or points that are NOT mentioned or untrue based on the passage.</p>
+            </a>
+
+             <a href="<?= base_url('materi/reading/references') ?>" class="book-card">
+                <div class="book-img-wrapper">
+                    <img src="<?php echo base_url('assets/images/book-reading4.png'); ?>" alt="Stated Detail Information">
+                </div>
+                <h3>References Question</h3>
+                <p>Finding and analyzing specific information directly mentioned in the text.</p>
+            </a>
+
+            <a href="<?= base_url('materi/reading/inferences') ?>" class="book-card">
+                <div class="book-img-wrapper">
+                    <img src="<?php echo base_url('assets/images/book-reading5.png'); ?>" alt="Unstated Detail Information">
+                </div>
+                <h3>Inferences Question</h3>
                 <p>Recognizing facts or points that are NOT mentioned or untrue based on the passage.</p>
             </a>
 
