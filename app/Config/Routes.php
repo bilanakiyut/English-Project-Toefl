@@ -4,7 +4,17 @@ use CodeIgniter\Router\RouteCollection;
 /** @var RouteCollection $routes */
 $routes->get('/', 'Home::index');
 $routes->get('login', 'Auth::login');
+
+//register
 $routes->get('register', 'Auth::register');
+$routes->post('processRegister', 'Auth::processRegister');
+
+
+//login
+$routes->get('processLogin','Auth::processLogin');
+$routes->post('processLogin', 'Auth::processLogin');
+
+$routes->get('logout', 'Auth::logout');
 
 //quiz
 $routes->get('materi', 'MateriController::index');

@@ -357,7 +357,52 @@
             .content p { text-align: center; }
             .btn-wrap, .stats { justify-content: center; display: flex; }
             .image-grid { width: 100%; max-width: 400px; height: 380px; margin: 0 auto; }
+            
         }
+        .user-info{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.user-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:rgba(242,229,198,0.15);
+    border:1px solid rgba(242,229,198,0.3);
+    color:var(--cream);
+    font-family:'Playfair Display', serif;
+    font-size:18px;
+    font-weight:700;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    backdrop-filter:blur(10px);
+}
+
+.user-name{
+    color:var(--cream);
+    font-size:1rem;
+    font-weight:600;
+    letter-spacing:1px;
+}
+
+.btn-logout{
+    text-decoration:none;
+    padding:8px 18px;
+    border-radius:20px;
+    background:var(--cream);
+    color:var(--maroon-dark);
+    font-weight:700;
+    transition:all .3s ease;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+}
+
+.btn-logout:hover{
+    transform:translateY(-2px);
+    background:white;
+}
     </style>
 </head>
 <body>
@@ -372,9 +417,31 @@
 </div>
 
         <div class="auth-links">
-            <a href="<?= base_url('login') ?>" class="btn-login">Login</a>
-            <a href="<?= base_url('register') ?>" class="btn-register">Register</a>
+
+<?php if(session()->get('logged_in')): ?>
+
+    <div class="user-info">
+        <div class="user-avatar">
+            <?= strtoupper(substr(session()->get('name'), 0, 1)) ?>
         </div>
+
+        <span class="user-name">
+            <?= session()->get('name') ?>
+        </span>
+
+        <a href="<?= base_url('logout') ?>" class="btn-logout" onclick="return confirm('Yakin ingin logout?')">
+            Logout
+        </a>
+    </div>
+
+<?php else: ?>
+
+    <a href="<?= base_url('login') ?>" class="btn-login">Login</a>
+    <a href="<?= base_url('register') ?>" class="btn-register">Register</a>
+
+<?php endif; ?>
+
+</div>
     </nav>
 
     <div class="container">

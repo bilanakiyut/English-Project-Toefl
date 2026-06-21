@@ -67,8 +67,9 @@
 
             <h2 class="text-3xl font-extrabold text-[#560F1E] mb-6 tracking-wide">Sign Up</h2>
 
-            <form action="<?= base_url('register/process') ?>" method="POST" class="w-full flex flex-col gap-4">
-                <?= csrf_field() ?>
+            
+            <form action="<?= site_url('processRegister') ?>" method="POST" class="w-full flex flex-col gap-4">
+               
 
                 <div class="w-full">
                     <label class="block text-xs font-semibold text-[#8A7E75] mb-1">Name :</label>
@@ -79,7 +80,7 @@
                         </div>
                         <input name="name" type="text"
                             class="flex-1 bg-transparent px-4 text-sm font-semibold text-[#560F1E] outline-none"
-                            value="Alya Zilyanti cantik nan imut" required>
+                             required>
                     </div>
                 </div>
 
@@ -92,7 +93,7 @@
                         </div>
                         <input name="email" type="email"
                             class="flex-1 bg-transparent px-4 text-sm font-semibold text-[#560F1E] outline-none"
-                            value="alyazilyanti22@gmail.com" required>
+                            required>
                     </div>
                 </div>
 
@@ -104,8 +105,9 @@
                             <i class="fa-solid fa-lock text-sm"></i>
                         </div>
                         <input name="password" id="password" type="password"
+                        minlength="8"
                             class="flex-1 bg-transparent px-4 text-sm font-semibold text-[#560F1E] tracking-widest outline-none"
-                            value="password123" required>
+                             required>
                         <button type="button" onclick="togglePassword('password', 'eyeIcon1')"
                             class="pr-4 text-[#560F1E] focus:outline-none text-md">
                             <i id="eyeIcon1" class="fa-regular fa-eye-slash"></i>
@@ -122,7 +124,7 @@
                         </div>
                         <input name="confirm_password" id="confirmPassword" type="password"
                             class="flex-1 bg-transparent px-4 text-sm font-semibold text-[#560F1E] tracking-widest outline-none"
-                            value="password123" required>
+                          required>
                         <button type="button" onclick="togglePassword('confirmPassword', 'eyeIcon2')"
                             class="pr-4 text-[#560F1E] focus:outline-none text-md">
                             <i id="eyeIcon2" class="fa-regular fa-eye-slash"></i>

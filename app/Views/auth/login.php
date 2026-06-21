@@ -87,8 +87,7 @@
                 </div>
                 <h2 class="text-3xl font-extrabold text-[#560F1E] mb-8 tracking-wide">Login Account</h2>
 
-                <form action="<?= base_url('login/process') ?>" method="POST" class="w-full flex flex-col gap-5">
-                    <?= csrf_field() ?>
+                <form action= "<?= site_url('processLogin') ?>" method="POST" class="w-full flex flex-col gap-5">
                     <div class="w-full">
                         <label class="block text-xs font-semibold text-[#8A7E75] mb-1.5">Email Address :</label>
                         <div
@@ -99,7 +98,7 @@
                             </div>
                             <input name="email" type="email"
                                 class="flex-1 bg-transparent px-4 text-sm font-semibold text-[#560F1E] outline-none"
-                                value="alyazilyanti22@gmail.com" required>
+                                 required>
                         </div>
                     </div>
                     <div class="w-full">
@@ -112,7 +111,7 @@
                             </div>
                             <input name="password" id="loginPassword" type="password"
                                 class="flex-1 bg-transparent px-4 text-sm font-semibold text-[#560F1E] tracking-widest outline-none"
-                                value="password123" required>
+                               required>
                             <button type="button" onclick="togglePassword('loginPassword', 'loginEyeIcon')"
                                 class="pr-4 text-[#560F1E] text-md"><i id="loginEyeIcon"
                                     class="fa-regular fa-eye-slash"></i></button>
