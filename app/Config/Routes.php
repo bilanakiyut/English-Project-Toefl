@@ -21,6 +21,8 @@ $routes->get('materi', 'MateriController::index');
 $routes->get('quiz_toefl', 'QuizController::index');
 $routes->get('quiz/quiz-soal', 'QuizController::quiz_soal');
 $routes->get('quiz/result', 'QuizController::result');
+$routes->post('quiz/submit', 'QuizController::submit');
+$routes->get('quiz/review/(:num)', 'QuizReviewController::reviewFlashcards/$1');
 
 //history
 $routes->get('dashboard_history', 'HistoryController::index');
@@ -66,3 +68,34 @@ $routes->get('materi/listening/listening', 'MateriController::listening');
 $routes->get('materi/listening/listening-short-conversations', 'MateriController::listening_short_conversations');
 $routes->get('materi/listening/listening-longer-conversations', 'MateriController::listening_longer_conversations');
 $routes->get('materi/listening/listening-talks-notetaking', 'MateriController::listening_talks_notetaking');
+
+//toefl
+
+$routes->group('toefl', function($routes){
+
+    $routes->get(
+        'start',
+        'ToeflController::start'
+    );
+
+    $routes->get(
+        'test/(:segment)',
+        'ToeflController::test/$1'
+    );
+
+    $routes->post(
+        'submit',
+        'ToeflController::submit'
+    );
+
+    $routes->get(
+        'finish',
+        'ToeflController::finish'
+    );
+
+    $routes->get(
+        'result/(:num)',
+        'ToeflController::result/$1'
+    );
+
+});

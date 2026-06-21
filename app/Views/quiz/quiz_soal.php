@@ -475,176 +475,316 @@
 </head>
 <body>
 
-<div class="quiz-container">
+<!--
+    ====================================================================
+    CATATAN INTEGRASI DATABASE (boleh dihapus setelah dibaca)
+    ====================================================================
+    1. Controller harus mengirim variabel $questions ke view ini, berupa
+       array asosiatif per soal, minimal field:
+           id         -> id unik soal (dipakai sebagai key jawaban)
+           question   -> teks soal (boleh HTML, mis. <em>...</em>)
+           option_b   -> teks pilihan B
+           option_c   -> teks pilihan C
+           option_d   -> teks pilihan D
+       (Pilihan "A" sengaja TIDAK datang dari DB karena di desain ini
+       slot A adalah kolom isian bebas / fill-in-the-blank.)
 
-    <div class="quiz-header">
-        <h1>QUIZ TOEFL</h1>
-    </div>
+    2. Saat disubmit, server akan menerima POST:
+           answers[<id_soal>] = <jawaban>
+       Isi <jawaban>:
+           - "B" / "C" / "D"  -> jika user klik salah satu pilihan tetap
+           - teks bebas       -> jika user mengisi sendiri di kolom A
+       Jadi di backend, cek dulu apakah value yang masuk persis "B"/"C"/"D";
+       kalau bukan salah satu dari itu, berarti itu jawaban isian bebas.
 
-    <div class="quiz-topbar">
-        <div class="quiz-score" id="score-display">0/100</div>
-        <div class="timer-group">
-            <div class="timer-badge" id="timer-display">15s</div>
-            <div class="timer-icon">⏱</div>
+    3. Sesuaikan action form di bawah (<?= base_url('toefl/submit') ?>)
+       dan csrf_field() dengan helper framework yang dipakai.
+    ====================================================================
+-->
+
+<form action="<?= base_url('quiz/submit') ?>" method="POST" id="quiz-form">
+    <?= csrf_field() ?>
+
+    <div class="quiz-container">
+
+        <div class="quiz-header">
+            <h1>QUIZ TOEFL</h1>
         </div>
-    </div>
 
-    <div class="quiz-main">
+        <div class="quiz-topbar">
+            <div class="quiz-score" id="score-display">0/0</div>
+            <div class="timer-group">
+                <div class="timer-badge" id="timer-display">15s</div>
+                <div class="timer-icon">⏱</div>
+            </div>
+        </div>
 
-        <!-- QUESTION CARD -->
-        <div class="question-card">
-            <div class="question-number" id="question-number">1</div>
+        <div class="quiz-main">
 
-            <p class="question-text">
-                "________ was late <em>caused</em> many problems."
-            </p>
+            <!-- QUESTION CARD -->
+            <div class="question-card">
+                <div class="question-number" id="question-number">1</div>
 
-            <div class="options-list" id="options-list">
-                <div class="option-item option-input">
-                    <input type="text" placeholder="A. Type your answer here">
+                <p class="question-text" id="question-text"></p>
+
+                <div class="options-list" id="options-list"></div>
+
+                <div class="question-nav">
+                    <button type="button" class="nav-btn" id="prev-btn">◀</button>
+                    <button type="button" class="nav-btn" id="next-btn">▶</button>
                 </div>
-                <div class="option-item" data-value="B">B. The driver</div>
-                <div class="option-item" data-value="C">C. There</div>
-                <div class="option-item" data-value="D">D. Because</div>
             </div>
 
-            <div class="question-nav">
-                <button class="nav-btn" id="prev-btn">◀</button>
-                <button class="nav-btn" id="next-btn">▶</button>
+            <!-- QUESTION MAP + SUBMIT -->
+            <div class="question-map-card">
+                <h3>Question Map</h3>
+
+                <div class="map-grid-wrapper">
+                    <div class="map-grid" id="map-grid"></div>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <button type="button" class="submit-btn" id="submit-btn">
+                    ✔ Submit Quiz
+                </button>
+                <p class="submit-hint" id="submit-hint">
+                    You have answered <strong id="answered-count">0</strong>/<span id="total-count">0</span> questions.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM ACTION BAR -->
+        <div class="bottom-bar">
+            <div class="bottom-bar-top"></div>
+            <div class="bottom-bar-buttons">
+                <button type="button" class="status-btn answered" data-status="answered">Answered</button>
+                <button type="button" class="status-btn unanswered" data-status="unanswered">Unanswered</button>
+                <button type="button" class="status-btn doubt" data-status="doubt">Doubtful</button>
             </div>
         </div>
 
-        <!-- QUESTION MAP + SUBMIT -->
-        <div class="question-map-card">
-            <h3>Question Map</h3>
-
-            <div class="map-grid-wrapper">
-                <div class="map-grid" id="map-grid"></div>
-            </div>
-
-            <!-- SUBMIT BUTTON -->
-            <button class="submit-btn" id="submit-btn">
-                ✔ Submit Quiz
-            </button>
-            <p class="submit-hint" id="submit-hint">
-                You have answered <strong id="answered-count">0</strong>/100 questions.
-            </p>
+        <div class="legend">
+            <div class="legend-item"><span class="legend-dot answered"></span> Answered</div>
+            <div class="legend-item"><span class="legend-dot unanswered"></span> Unanswered</div>
+            <div class="legend-item"><span class="legend-dot doubt"></span> Doubtful</div>
         </div>
 
     </div>
 
-    <!-- BOTTOM ACTION BAR -->
-    <div class="bottom-bar">
-        <div class="bottom-bar-top"></div>
-        <div class="bottom-bar-buttons">
-            <button class="status-btn answered" data-status="answered">Answered</button>
-            <button class="status-btn unanswered" data-status="unanswered">Unanswered</button>
-            <button class="status-btn doubt" data-status="doubt">Doubtful</button>
+    <!-- Hidden inputs untuk SEMUA jawaban dibuat di sini tepat sebelum submit,
+         karena hanya soal yang sedang tampil yang ada elemen-nya di DOM. -->
+    <div id="hidden-answers-container" style="display:none;"></div>
+
+    <!-- ===== CONFIRMATION MODAL ===== -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">📋</div>
+            <h2>Submit Quiz?</h2>
+            <p>Make sure you have reviewed all your answers before submitting.</p>
+
+            <div class="modal-stats">
+                <div class="modal-stat ok">
+                    <span class="ms-val" id="modal-answered">0</span>
+                    <span class="ms-lbl">Answered</span>
+                </div>
+                <div class="modal-stat warn">
+                    <span class="ms-val" id="modal-unanswered">0</span>
+                    <span class="ms-lbl">Unanswered</span>
+                </div>
+                <div class="modal-stat">
+                    <span class="ms-val" id="modal-doubt">0</span>
+                    <span class="ms-lbl">Doubtful</span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="modal-btn cancel" id="modal-cancel">Back to Quiz</button>
+                <button type="button" class="modal-btn confirm" id="modal-confirm">Yes, Submit</button>
+            </div>
         </div>
     </div>
 
-    <div class="legend">
-        <div class="legend-item"><span class="legend-dot answered"></span> Answered</div>
-        <div class="legend-item"><span class="legend-dot unanswered"></span> Unanswered</div>
-        <div class="legend-item"><span class="legend-dot doubt"></span> Doubtful</div>
-    </div>
-
-</div>
-
-<!-- ===== CONFIRMATION MODAL ===== -->
-<div class="modal-overlay" id="modal-overlay">
-    <div class="modal-box">
-        <div class="modal-icon">📋</div>
-        <h2>Submit Quiz?</h2>
-        <p>Make sure you have reviewed all your answers before submitting.</p>
-
-        <div class="modal-stats">
-            <div class="modal-stat ok">
-                <span class="ms-val" id="modal-answered">0</span>
-                <span class="ms-lbl">Answered</span>
-            </div>
-            <div class="modal-stat warn">
-                <span class="ms-val" id="modal-unanswered">100</span>
-                <span class="ms-lbl">Unanswered</span>
-            </div>
-            <div class="modal-stat">
-                <span class="ms-val" id="modal-doubt">0</span>
-                <span class="ms-lbl">Doubtful</span>
-            </div>
-        </div>
-
-        <div class="modal-actions">
-            <button class="modal-btn cancel" id="modal-cancel">Back to Quiz</button>
-            <button class="modal-btn confirm" id="modal-confirm">Yes, Submit</button>
-        </div>
-    </div>
-</div>
+</form>
 
 <script>
-    const TOTAL_QUESTIONS = 100;
-    let currentQuestion = 1;
-    const status = Array(TOTAL_QUESTIONS + 1).fill('unanswered');
+    console.log('SCRIPT JALAN');
+    // Data soal datang dari database lewat controller.
+    // $questions: array of { id, question, option_b, option_c, option_d }
+    const QUESTIONS = <?= json_encode($questions) ?>;
 
-    const mapGrid       = document.getElementById('map-grid');
-    const questionNumber= document.getElementById('question-number');
-    const scoreDisplay  = document.getElementById('score-display');
-    const optionsList   = document.getElementById('options-list');
-    const prevBtn       = document.getElementById('prev-btn');
-    const nextBtn       = document.getElementById('next-btn');
-    const submitBtn     = document.getElementById('submit-btn');
-    const submitHint    = document.getElementById('submit-hint');
-    const answeredCount = document.getElementById('answered-count');
-    const modalOverlay  = document.getElementById('modal-overlay');
-    const modalCancel   = document.getElementById('modal-cancel');
-    const modalConfirm  = document.getElementById('modal-confirm');
+const SECTIONS = [
+    {
+        category: 'structure',
+        duration: 35 * 60
+    },
+    {
+        category: 'listening',
+        duration: 25 * 60
+    },
+    {
+        category: 'reading',
+        duration: 55 * 60
+    }
+];
+
+let currentSection = 0;
+let currentQuestion = 1;
+
+let activeQuestions = QUESTIONS.filter(
+    q => q.category.toLowerCase() === SECTIONS[currentSection].category
+);
+
+function getTotalQuestions() {
+    return activeQuestions.length;
+}
+
+    const answers = {}; // { [questionId]: "B" | "C" | "D" | "<teks bebas>" }
+    const status = Array(QUESTIONS.length + 1).fill('unanswered');
+
+    const mapGrid                = document.getElementById('map-grid');
+    const questionNumber         = document.getElementById('question-number');
+    const scoreDisplay           = document.getElementById('score-display');
+    const optionsList            = document.getElementById('options-list');
+    const prevBtn                = document.getElementById('prev-btn');
+    const nextBtn                = document.getElementById('next-btn');
+    const submitBtn              = document.getElementById('submit-btn');
+    const answeredCount          = document.getElementById('answered-count');
+    const totalCount             = document.getElementById('total-count');
+    const modalOverlay           = document.getElementById('modal-overlay');
+    const modalCancel            = document.getElementById('modal-cancel');
+    const modalConfirm           = document.getElementById('modal-confirm');
+    const hiddenAnswersContainer = document.getElementById('hidden-answers-container');
+    const quizForm                = document.getElementById('quiz-form');
+
+    totalCount.textContent = getTotalQuestions();
 
     function countByStatus(s){ return status.filter(x => x === s).length; }
 
-    function renderMap(){
-        mapGrid.innerHTML = '';
-        for(let i = 1; i <= TOTAL_QUESTIONS; i++){
-            const item = document.createElement('div');
-            item.className = 'map-item ' + status[i];
-            if(i === currentQuestion) item.classList.add('current');
-            item.textContent = i;
-            item.addEventListener('click', () => { currentQuestion = i; refresh(); });
-            mapGrid.appendChild(item);
+    function renderMap() {
+    mapGrid.innerHTML = '';
+
+    for(let i = 1; i <= getTotalQuestions(); i++) {
+
+        const item = document.createElement('div');
+
+        item.className = 'map-item ' + status[i];
+
+        if(i === currentQuestion) {
+            item.classList.add('current');
+        }
+
+        item.textContent = i;
+
+        item.addEventListener('click', () => {
+            currentQuestion = i;
+            refresh();
+        });
+
+        mapGrid.appendChild(item);
+    }
+}
+
+    // Render satu soal: kolom isian bebas (A) + 3 pilihan tetap (B/C/D),
+    // markup-nya sama persis dengan versi hardcode aslinya.
+    function loadQuestion(index){
+        const q = activeQuestions[index - 1];
+
+        let content = '';
+
+        if(q.category === 'listening' && q.audio_file){
+            content += `
+                <div style="text-align:center;margin-bottom:20px;">
+                    <audio controls id="question-audio">
+                        <source src="/assets/sounds/${q.audio_file}" type="audio/mpeg">
+                        Browser tidak mendukung audio.
+                    </audio>
+                </div>
+            `;  
+        }
+
+        content += `<div>${q.question ?? ''}</div>`;
+
+        document.getElementById('question-text').innerHTML = content;
+
+        optionsList.innerHTML = `
+            <div class="option-item" data-value="A">A. ${q.option_a}</div>
+            <div class="option-item" data-value="B">B. ${q.option_b}</div>
+            <div class="option-item" data-value="C">C. ${q.option_c}</div>
+            <div class="option-item" data-value="D">D. ${q.option_d}</div>
+        `;
+
+        // Pulihkan jawaban yang sudah pernah diisi user untuk soal ini
+        const saved = answers[q.id];
+        if(saved === 'B' || saved === 'C' || saved === 'D'){
+            const opt = optionsList.querySelector(`.option-item[data-value="${saved}"]`);
+            if(opt) opt.classList.add('selected');
+        } else if(saved){
+            optionsList.querySelector('#free-text-input').value = saved;
         }
     }
 
     function updateScore(){
-        const answered = countByStatus('answered');
-        scoreDisplay.textContent   = answered + '/' + TOTAL_QUESTIONS;
-        answeredCount.textContent  = answered;
-    }
+
+    const answered = countByStatus('answered');
+
+    scoreDisplay.textContent =
+        answered + '/' + getTotalQuestions();
+
+    answeredCount.textContent = answered;
+}
 
     function refresh(){
-        questionNumber.textContent = currentQuestion;
-        prevBtn.disabled = currentQuestion === 1;
-        nextBtn.disabled = currentQuestion === TOTAL_QUESTIONS;
-        document.querySelectorAll('.option-item').forEach(opt => opt.classList.remove('selected'));
-        renderMap();
-        updateScore();
-    }
 
-    // option click
+    loadQuestion(currentQuestion);
+
+    questionNumber.textContent = currentQuestion;
+
+    prevBtn.disabled = currentQuestion === 1;
+
+    nextBtn.disabled =
+        currentQuestion === getTotalQuestions();
+
+    renderMap();
+
+    updateScore();
+}
+    // klik pilihan B/C/D
     optionsList.addEventListener('click', (e) => {
         const opt = e.target.closest('.option-item');
         if(!opt || opt.classList.contains('option-input')) return;
+
         document.querySelectorAll('.option-item').forEach(o => o.classList.remove('selected'));
         opt.classList.add('selected');
-        status[currentQuestion] = 'answered';
-        refresh();
-    });
 
-    // text input
-    optionsList.querySelector('.option-input input').addEventListener('input', (e) => {
-        status[currentQuestion] = e.target.value.trim() ? 'answered' : 'unanswered';
+        const q = activeQuestions[currentQuestion - 1];
+        answers[q.id] = opt.dataset.value;
+        status[currentQuestion] = 'answered';
+
         renderMap();
         updateScore();
     });
 
-    // bottom status buttons
+    // isian bebas (kolom A) — listener dipasang ulang tiap render lewat delegasi 'input'
+    optionsList.addEventListener('input', (e) => {
+        if(e.target.id !== 'free-text-input') return;
+
+        const q = activeQuestions[currentQuestion - 1];
+        const value = e.target.value.trim();
+
+        if(value){
+            answers[q.id] = value;
+            status[currentQuestion] = 'answered';
+        } else {
+            delete answers[q.id];
+            status[currentQuestion] = 'unanswered';
+        }
+
+        renderMap();
+        updateScore();
+    });
+
+    // tombol status (bottom bar)
     document.querySelectorAll('.status-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             status[currentQuestion] = btn.dataset.status;
@@ -652,13 +792,33 @@
         });
     });
 
-    // navigation
+    // navigasi
     prevBtn.addEventListener('click', () => { if(currentQuestion > 1){ currentQuestion--; refresh(); } });
-    nextBtn.addEventListener('click', () => { if(currentQuestion < TOTAL_QUESTIONS){ currentQuestion++; refresh(); } });
+    nextBtn.addEventListener('click', () => {
+
+    if(currentQuestion < getTotalQuestions()){
+
+        currentQuestion++;
+
+        refresh();
+    }
+});
+
+    // Bangun hidden input answers[id] dari semua jawaban tersimpan,
+    // supaya SEMUA soal ikut terkirim saat form di-submit (bukan cuma yang tampil).
+    function buildHiddenAnswerInputs(){
+        hiddenAnswersContainer.innerHTML = '';
+        Object.keys(answers).forEach((qid) => {
+            const input = document.createElement('input');
+            input.type  = 'hidden';
+            input.name  = `answers[${qid}]`;
+            input.value = answers[qid];
+            hiddenAnswersContainer.appendChild(input);
+        });
+    }
 
     // ===== SUBMIT FLOW =====
     submitBtn.addEventListener('click', () => {
-        // populate modal stats
         document.getElementById('modal-answered').textContent   = countByStatus('answered');
         document.getElementById('modal-unanswered').textContent = countByStatus('unanswered');
         document.getElementById('modal-doubt').textContent      = countByStatus('doubt');
@@ -670,32 +830,92 @@
     });
 
     modalConfirm.addEventListener('click', () => {
-        // Pass stats to flashcard page via sessionStorage
+        console.log('TOMBOL YES SUBMIT DIKLIK');
+        // simpan ringkasan untuk dipakai halaman berikutnya (opsional, sifatnya tampilan saja)
         const quizData = {
             answered  : countByStatus('answered'),
             unanswered: countByStatus('unanswered'),
             doubt     : countByStatus('doubt'),
-            total     : TOTAL_QUESTIONS
+            total     : getTotalQuestions()
         };
         sessionStorage.setItem('quizResult', JSON.stringify(quizData));
 
-        // Redirect to the review flashcard page
-       window.location.href = '<?= base_url('quiz/result') ?>';
+        // pastikan jawaban soal yang sedang tampil ikut tersimpan sebelum dikumpulkan
+        buildHiddenAnswerInputs();
+
+        // submit form yang sesungguhnya ke server (sumber data utama untuk database)
+        quizForm.submit();
+        
     });
 
-    // close modal on overlay click
+    // tutup modal kalau klik area luar
     modalOverlay.addEventListener('click', (e) => {
         if(e.target === modalOverlay) modalOverlay.classList.remove('active');
     });
 
+    function nextSection()
+{
+    currentSection++;
+
+    if(currentSection >= SECTIONS.length)
+    {
+        buildHiddenAnswerInputs();
+        quizForm.submit();
+        return;
+    }
+
+    activeQuestions = QUESTIONS.filter(
+        q =>
+            q.category.toLowerCase() ===
+            SECTIONS[currentSection].category
+    );
+
+    currentQuestion = 1;
+    status.fill('');
+
+    totalCount.textContent = getTotalQuestions();
+
+
+    timeLeft = SECTIONS[currentSection].duration;
+
+    refresh();
+
+    alert(
+        'Section ' +
+        SECTIONS[currentSection].category.toUpperCase() +
+        ' dimulai'
+    );
+}
+
     // timer
     const timerDisplay = document.getElementById('timer-display');
-    let timeLeft = 15;
-    setInterval(() => {
-        timeLeft--;
-        if(timeLeft < 0) timeLeft = 15;
-        timerDisplay.textContent = timeLeft + 's';
-    }, 1000);
+    let timeLeft = SECTIONS[currentSection].duration;
+
+function updateTimer()
+{
+    const minutes = Math.floor(timeLeft / 60);
+
+    const seconds = timeLeft % 60;
+
+    timerDisplay.textContent =
+        `${minutes}:${seconds.toString().padStart(2,'0')}`;
+}
+
+updateTimer();
+
+setInterval(() => {
+
+    timeLeft--;
+
+    if(timeLeft <= 0)
+    {
+        nextSection();
+        return;
+    }
+
+    updateTimer();
+
+}, 1000);
 
     refresh();
 </script>

@@ -1,3 +1,75 @@
+<?php
+/**
+ * View: review_flashcards.php
+ * -----------------------------------------------------------------
+ * Versi dinamis dari halaman "Review Flashcards".
+ * Semua data (profil, statistik, akurasi, daftar flashcard) diambil
+ * dari $data yang dikirim controller — TIDAK ADA data hardcode lagi.
+ *
+ * Variabel yang HARUS dikirim dari Controller ke view ini:
+ *
+ * $user = [
+ *     'name'        => 'Alya Zilyanti',
+ *     'avatar_url'  => null,              // null -> pakai ikon default
+ *     'program'     => 'TOEFL Practice',
+ * ];
+ *
+ * $topics = ['Structure', 'Writing', 'Reading', 'Listening'];
+ *
+ * $stats = [
+ *     'rank'               => 19,
+ *     'total_participants' => 30,
+ *     'score'              => 493,
+ *     'time_hours'         => 12,
+ *     'time_minutes'       => 45,
+ * ];
+ *
+ * $accuracy = [
+ *     'percent'   => 60,
+ *     'correct'   => 84,
+ *     'incorrect' => 56,
+ *     'total'     => 140,
+ * ];
+ *
+ * $flashcards = [
+ *     [
+ *         'is_correct'   => true,
+ *         'question_text'=> 'Medical researchers discovered that the psychologi...',
+ *         'options' => [
+ *             ['letter' => 'A', 'text' => 'crisis',   'is_correct' => false, 'is_selected' => false],
+ *             ['letter' => 'B', 'text' => 'crisises', 'is_correct' => false, 'is_selected' => false],
+ *             ['letter' => 'C', 'text' => 'crises',   'is_correct' => true,  'is_selected' => true],
+ *             ['letter' => 'D', 'text' => 'crisply',  'is_correct' => false, 'is_selected' => false],
+ *         ],
+ *     ],
+ *     // ... dan seterusnya untuk setiap soal
+ * ];
+ *
+ * Catatan: bagian "Grammar Note" SUDAH DIHAPUS dari tampilan ini karena
+ * tabel `questions` di database belum punya kolom penjelasan grammar.
+ * CSS untuk .grammar-note dibiarkan tetap ada di <style> (tidak dipakai),
+ * jadi kalau suatu saat Anda menambah kolom penjelasan, tinggal munculkan
+ * lagi bloknya tanpa perlu menulis ulang CSS.
+ *
+ * Lihat QuizReviewController.php untuk contoh bagaimana data ini
+ * diambil dari database (tabel users, test_sessions, test_answers, questions).
+ * -----------------------------------------------------------------
+ */
+
+// Fallback aman supaya view tidak fatal error kalau controller lupa kirim variabel
+$user       = $user       ?? ['name' => '-', 'avatar_url' => null, 'program' => 'TOEFL Practice'];
+$topics     = $topics     ?? [];
+$stats      = $stats      ?? ['rank' => 0, 'total_participants' => 0, 'score' => 0, 'time_hours' => 0, 'time_minutes' => 0];
+$accuracy   = $accuracy   ?? ['percent' => 0, 'correct' => 0, 'incorrect' => 0, 'total' => 0];
+$flashcards = $flashcards ?? [];
+
+// Helper escape kecil kalau fungsi esc() (CodeIgniter) tidak tersedia di framework Anda
+if (!function_exists('esc')) {
+    function esc($value) {
+        return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -483,7 +555,7 @@
 
     <!-- TOP BAR -->
     <div class="top-bar">
-        <a href="#" class="back-btn">
+        <a href="<?= base_url('quiz_toefl') ?>" class="back-btn">
             <div class="back-arrow">&#8592;</div>
             BACK
         </a>
@@ -496,22 +568,26 @@
         <div class="profile-card">
             <div class="profile-top">
                 <div class="avatar">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="8" r="4"/>
-                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-                    </svg>
+                    <?php if (!empty($user['avatar_url'])): ?>
+                        <img src="<?= esc($user['avatar_url']) ?>" alt="<?= esc($user['name']) ?>"
+                             style="width:100%;height:100%;border-radius:50%;object-fit:cover;">
+                    <?php else: ?>
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                        </svg>
+                    <?php endif; ?>
                 </div>
                 <div class="profile-info">
-                    <h2>Alya Zilyanti</h2>
+                    <h2><?= esc($user['name']) ?></h2>
                     <div class="subtitle">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                        TOEFL Practice
+                        <?= esc($user['program']) ?>
                     </div>
                     <div class="topic-tags">
-                        <span class="topic-tag">Structure</span>
-                        <span class="topic-tag">Writing</span>
-                        <span class="topic-tag">Reading</span>
-                        <span class="topic-tag">Listening</span>
+                        <?php foreach ($topics as $topic): ?>
+                            <span class="topic-tag"><?= esc($topic) ?></span>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -523,7 +599,7 @@
                     </div>
                     <div class="stat-info">
                         <div class="label">Current Rank</div>
-                        <div class="value">19<span>/30</span></div>
+                        <div class="value"><?= (int) $stats['rank'] ?><span>/<?= (int) $stats['total_participants'] ?></span></div>
                     </div>
                 </div>
                 <div class="stat-box">
@@ -532,7 +608,7 @@
                     </div>
                     <div class="stat-info">
                         <div class="label">Score</div>
-                        <div class="value">493</div>
+                        <div class="value"><?= (int) $stats['score'] ?></div>
                     </div>
                 </div>
                 <div class="stat-box">
@@ -541,7 +617,7 @@
                     </div>
                     <div class="stat-info">
                         <div class="label">Time Spent</div>
-                        <div class="value">12h <span>45m</span></div>
+                        <div class="value"><?= (int) $stats['time_hours'] ?>h <span><?= (int) $stats['time_minutes'] ?>m</span></div>
                     </div>
                 </div>
             </div>
@@ -550,15 +626,17 @@
         <!-- Accuracy Card -->
         <div class="accuracy-card">
             <div class="accuracy-label">Accuracy</div>
-            <div class="accuracy-value">60%</div>
+            <div class="accuracy-value"><?= (int) $accuracy['percent'] ?>%</div>
             <div class="accuracy-bar-wrap">
-                <div class="accuracy-bar-fill" style="width: 60%;"></div>
+                <div class="accuracy-bar-fill" style="width: <?= (int) $accuracy['percent'] ?>%;"></div>
             </div>
             <div class="accuracy-detail">
-                <span class="correct">&#10003; 84 Correct</span>
-                <span class="incorrect">&#10007; 56 Incorrect</span>
+                <span class="correct">&#10003; <?= (int) $accuracy['correct'] ?> Correct</span>
+                <span class="incorrect">&#10007; <?= (int) $accuracy['incorrect'] ?> Incorrect</span>
             </div>
-            <div style="font-size:0.85rem; opacity:0.6; margin-top:4px; font-family:sans-serif; letter-spacing:1px;">out of 140 questions</div>
+            <div style="font-size:0.85rem; opacity:0.6; margin-top:4px; font-family:sans-serif; letter-spacing:1px;">
+                out of <?= (int) $accuracy['total'] ?> questions
+            </div>
         </div>
 
     </div>
@@ -571,266 +649,59 @@
     <!-- FLASHCARD GRID -->
     <div class="flashcards-grid">
 
-        <!-- ===== CARD 1 — CORRECT ===== -->
-        <div class="flashcard correct">
-            <div class="card-header">
-                <span class="card-number">Question 01</span>
-                <span class="card-status-tag">&#10003; Correct</span>
-            </div>
-            <div class="card-body">
-                <p class="question-sentence">
-                    "The researchers _____ the experiment three times before concluding the results."
-                </p>
-                <ul class="options-list">
-                    <li class="opt is-correct">
-                        <span class="opt-letter">A</span>
-                        <span>had performed</span>
-                        <span class="opt-icon">&#10003;</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">B</span>
-                        <span>was performing</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">C</span>
-                        <span>There</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">D</span>
-                        <span>Because</span>
-                    </li>
-                </ul>
-                <div class="grammar-note">
-                    <div class="grammar-note-title">Grammar Note</div>
-                    <p>The <strong>Past Perfect</strong> is used to describe an action completed before another action in the past. Here, the performing happened before the concluding.</p>
-                </div>
-            </div>
-        </div>
+        <?php if (empty($flashcards)): ?>
+            <p style="grid-column: 1 / -1; text-align:center; color:#999; font-style:italic;">
+                Belum ada data flashcard untuk percobaan kuis ini.
+            </p>
+        <?php endif; ?>
 
-        <!-- ===== CARD 2 — INCORRECT ===== -->
-        <div class="flashcard incorrect">
+        <?php foreach ($flashcards as $i => $card):
+            $statusClass = $card['is_correct'] ? 'correct' : 'incorrect';
+            $statusLabel = $card['is_correct'] ? '&#10003; Correct' : '&#10007; Incorrect';
+        ?>
+        <div class="flashcard <?= $statusClass ?>">
             <div class="card-header">
-                <span class="card-number">Question 02</span>
-                <span class="card-status-tag">&#10007; Incorrect</span>
+                <span class="card-number">Question <?= str_pad($i + 1, 2, '0', STR_PAD_LEFT) ?></span>
+                <span class="card-status-tag"><?= $statusLabel ?></span>
             </div>
             <div class="card-body">
-                <p class="question-sentence">
-                    "Neither the student nor his teachers _____ aware of the schedule change."
-                </p>
+                <p class="question-sentence">"<?= esc($card['question_text']) ?>"</p>
                 <ul class="options-list">
-                    <li class="opt is-wrong-pick">
-                        <span class="opt-letter">A</span>
-                        <span>Was</span>
-                        <span class="opt-icon">&#10007;</span>
+                    <?php foreach ($card['options'] as $opt):
+                        $optClass = 'neutral';
+                        $optIcon  = '';
+                        if (!empty($opt['is_correct'])) {
+                            $optClass = 'is-correct';
+                            $optIcon  = '&#10003;';
+                        } elseif (!empty($opt['is_selected'])) {
+                            $optClass = 'is-wrong-pick';
+                            $optIcon  = '&#10007;';
+                        }
+                    ?>
+                    <li class="opt <?= $optClass ?>">
+                        <span class="opt-letter"><?= esc($opt['letter']) ?></span>
+                        <span><?= esc($opt['text']) ?></span>
+                        <?php if ($optIcon): ?>
+                            <span class="opt-icon"><?= $optIcon ?></span>
+                        <?php endif; ?>
                     </li>
-                    <li class="opt is-correct">
-                        <span class="opt-letter">B</span>
-                        <span>Were</span>
-                        <span class="opt-icon">&#10003;</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">C</span>
-                        <span>There</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">D</span>
-                        <span>Because</span>
-                    </li>
+                    <?php endforeach; ?>
                 </ul>
-                <div class="grammar-note">
-                    <div class="grammar-note-title">Grammar Note</div>
-                    <p>In <strong>Subject-Verb Agreement</strong> with "neither/nor", the verb must agree with the subject closest to it. "Teachers" is plural, so "were" is required.</p>
-                </div>
+                <!-- Bagian Grammar Note sengaja dihapus: tabel questions belum
+                     punya kolom penjelasan. CSS .grammar-note tetap dibiarkan
+                     ada di <style> kalau-kalau nanti mau dipakai lagi. -->
             </div>
         </div>
-
-        <!-- ===== CARD 3 — CORRECT ===== -->
-        <div class="flashcard correct">
-            <div class="card-header">
-                <span class="card-number">Question 03</span>
-                <span class="card-status-tag">&#10003; Correct</span>
-            </div>
-            <div class="card-body">
-                <p class="question-sentence">
-                    "By the time she arrived, the meeting _____ already."
-                </p>
-                <ul class="options-list">
-                    <li class="opt neutral">
-                        <span class="opt-letter">A</span>
-                        <span>ended</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">B</span>
-                        <span>has ended</span>
-                    </li>
-                    <li class="opt is-correct">
-                        <span class="opt-letter">C</span>
-                        <span>had ended</span>
-                        <span class="opt-icon">&#10003;</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">D</span>
-                        <span>was ending</span>
-                    </li>
-                </ul>
-                <div class="grammar-note">
-                    <div class="grammar-note-title">Grammar Note</div>
-                    <p>The signal phrase <strong>"By the time"</strong> followed by Simple Past triggers the Past Perfect in the main clause. The meeting ended before she arrived.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== CARD 4 — INCORRECT ===== -->
-        <div class="flashcard incorrect">
-            <div class="card-header">
-                <span class="card-number">Question 04</span>
-                <span class="card-status-tag">&#10007; Incorrect</span>
-            </div>
-            <div class="card-body">
-                <p class="question-sentence">
-                    "Each of the students _____ required to submit a report."
-                </p>
-                <ul class="options-list">
-                    <li class="opt is-correct">
-                        <span class="opt-letter">A</span>
-                        <span>is</span>
-                        <span class="opt-icon">&#10003;</span>
-                    </li>
-                    <li class="opt is-wrong-pick">
-                        <span class="opt-letter">B</span>
-                        <span>are</span>
-                        <span class="opt-icon">&#10007;</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">C</span>
-                        <span>were</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">D</span>
-                        <span>have been</span>
-                    </li>
-                </ul>
-                <div class="grammar-note">
-                    <div class="grammar-note-title">Grammar Note</div>
-                    <p><strong>"Each"</strong> is always singular, even when followed by a plural noun ("of the students"). The correct verb form is singular: <strong>is</strong>, not "are".</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== CARD 5 — CORRECT ===== -->
-        <div class="flashcard correct">
-            <div class="card-header">
-                <span class="card-number">Question 05</span>
-                <span class="card-status-tag">&#10003; Correct</span>
-            </div>
-            <div class="card-body">
-                <p class="question-sentence">
-                    "The committee _____ its decision after a long debate."
-                </p>
-                <ul class="options-list">
-                    <li class="opt neutral">
-                        <span class="opt-letter">A</span>
-                        <span>announce</span>
-                    </li>
-                    <li class="opt is-correct">
-                        <span class="opt-letter">B</span>
-                        <span>announced</span>
-                        <span class="opt-icon">&#10003;</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">C</span>
-                        <span>announces</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">D</span>
-                        <span>were announcing</span>
-                    </li>
-                </ul>
-                <div class="grammar-note">
-                    <div class="grammar-note-title">Grammar Note</div>
-                    <p><strong>Collective nouns</strong> like "committee" take a singular verb in American English. Since the context implies a completed action, Simple Past <strong>announced</strong> is correct.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- ===== CARD 6 — INCORRECT ===== -->
-        <div class="flashcard incorrect">
-            <div class="card-header">
-                <span class="card-number">Question 06</span>
-                <span class="card-status-tag">&#10007; Incorrect</span>
-            </div>
-            <div class="card-body">
-                <p class="question-sentence">
-                    "If she _____ harder, she would have passed the exam."
-                </p>
-                <ul class="options-list">
-                    <li class="opt neutral">
-                        <span class="opt-letter">A</span>
-                        <span>studied</span>
-                    </li>
-                    <li class="opt is-wrong-pick">
-                        <span class="opt-letter">B</span>
-                        <span>would study</span>
-                        <span class="opt-icon">&#10007;</span>
-                    </li>
-                    <li class="opt is-correct">
-                        <span class="opt-letter">C</span>
-                        <span>had studied</span>
-                        <span class="opt-icon">&#10003;</span>
-                    </li>
-                    <li class="opt neutral">
-                        <span class="opt-letter">D</span>
-                        <span>has studied</span>
-                    </li>
-                </ul>
-                <div class="grammar-note">
-                    <div class="grammar-note-title">Grammar Note</div>
-                    <p>This is a <strong>Third Conditional</strong> structure. The pattern is: <em>If + had + past participle → would have + past participle</em>. It refers to an unreal past situation.</p>
-                </div>
-            </div>
-        </div>
+        <?php endforeach; ?>
 
     </div>
 
     <!-- FINISH BUTTON -->
     <div class="finish-section">
-        <button class="finish-btn" onclick="window.location.href = '<?= base_url('quiz_toefl') ?>';'">
+        <a href="<?= base_url('quiz_toefl') ?>" class="finish-btn" style="text-decoration:none; display:inline-block;">
             Back to Home
-        </button>
+        </a>
     </div>
 
-<script>
-    // ===== READ QUIZ RESULT FROM SESSIONSTORAGE =====
-    (function(){
-        const raw = sessionStorage.getItem('quizResult');
-        if(!raw) return;
-        try {
-            const d     = JSON.parse(raw);
-            const total   = d.total      || 100;
-            const correct = d.answered   || 0;
-            const wrong   = d.unanswered || 0;
-            const pct     = Math.round((correct / total) * 100);
-
-            // Accuracy card
-            const accVal  = document.querySelector('.accuracy-value');
-            const accFill = document.querySelector('.accuracy-bar-fill');
-            const accCor  = document.querySelector('.accuracy-detail .correct');
-            const accInc  = document.querySelector('.accuracy-detail .incorrect');
-            const accTot  = document.querySelector('.accuracy-card div:last-child');
-
-            if(accVal)  accVal.textContent   = pct + '%';
-            if(accFill) accFill.style.width  = pct + '%';
-            if(accCor)  accCor.innerHTML     = '&#10003; ' + correct + ' Correct';
-            if(accInc)  accInc.innerHTML     = '&#10007; ' + wrong   + ' Incorrect';
-            if(accTot)  accTot.textContent   = 'out of ' + total + ' questions';
-
-            // Score stat box (index 1)
-            const scoreVal = document.querySelectorAll('.stat-info .value')[1];
-            if(scoreVal) scoreVal.textContent = correct * 5;
-
-            sessionStorage.removeItem('quizResult');
-        } catch(e){}
-    })();
-</script>
 </body>
 </html>
